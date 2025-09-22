@@ -2,31 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Clerk CSP Test</title>
+  <title>Clerk Test</title>
 </head>
 <body>
-  <h2>Clerk CSP Test</h2>
+  <h2>Clerk GitHub Pages Test</h2>
   <div id="sign-in"></div>
 
-  <!-- Load Clerk from CDN -->
+  <!-- Load local Clerk SDK and provide your publishable key -->
   <script
+    src="js/clerk.browser.js"
     async
     crossorigin="anonymous"
-    data-clerk-publishable-key="pk_test_YWR2YW5jZWQtb3NwcmV5LTIzLmNsZXJrLmFjY291bnRzLmRldiQ"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+    data-clerk-publishable-key="pk_test_YWR2YW5jZWQtb3NwcmV5LTIzLmNsZXJrLmFjY291bnRzLmRldiQ">
   </script>
 
-  <!-- Inline JS that GitHub Pages will block -->
-  <script>
-    // This inline script will trigger a CSP error on GitHub Pages:
-    // "Refused to execute inline script because it violates the following Content Security Policy..."
-    window.addEventListener("load", async () => {
-      console.log("Trying to run inline Clerk code...");
-      await Clerk.load();
-      Clerk.mountSignIn(document.getElementById("sign-in"));
-    });
-  </script>
-
-  <p>Check the console for the CSP error.</p>
+  <!-- Load your app code -->
+  <script src="js/app.js"></script>
 </body>
 </html>
