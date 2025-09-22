@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clerk Login Test</title>
+  <script type="module">
+    import { Clerk } from "https://esm.run/@clerk/clerk-js";
+
+    const clerk = new Clerk("YOUR_CLERK_PUBLISHABLE_KEY_HERE");
+
+    window.onload = async () => {
+      await clerk.load();
+
+      const userButton = document.getElementById("user");
+      const signInDiv = document.getElementById("sign-in");
+      const userInfoDiv = document.getElementById("user-info");
+
+      if (clerk.user) {
+        // Logged in
+        userButton.style.display = "block";
+        userInfoDiv.innerHTML = `<p>Welcome, ${clerk.user.firstName || "user"}!</p>`;
+        signInDiv.style.display = "none";
+      } else {
+        // Not logged in
+        clerk.mountSignIn(signInDiv);
+      }
+
+      // Add listener for when login is completed
+      clerk.addListener(({ user }) => {
+        if (user) {
+          location.reload(); // Reload to reflect logged-in state
+        }
+      });
+    };
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background: #f0f0f0;
+    }
+    #sign-in {
+      margin: auto;
+      width: 300px;
+    }
+    #user-info {
+      margin-top: 2rem;
+    }
+    #user {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Clerk Login Test</h1>
+  <div id="sign-in"></div>
+  <div id="user-info"></div>
+  <div id="user">
+    <clerk-user-button></clerk-user-button>
+  </div>
+
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZXhvdGljLWFhcmR2YXJrLTI4LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js"
+  ></script>
+</body>
+</html>
