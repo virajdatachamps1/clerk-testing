@@ -2,21 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Clerk Example</title>
-
-  <!-- CSP updated to allow Clerk -->
-  <meta http-equiv="Content-Security-Policy"
-        content="
-          default-src 'self';
-          script-src 'self' https://cdn.jsdelivr.net;
-          connect-src 'self' https://api.clerk.dev https://cdn.jsdelivr.net;
-          style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
-          img-src 'self' data: https://cdn.jsdelivr.net;">
+  <title>Clerk CSP Test</title>
 </head>
 <body>
+  <h2>Clerk CSP Test</h2>
   <div id="sign-in"></div>
 
-  <!-- Load Clerk from jsDelivr CDN -->
+  <!-- Load Clerk from CDN -->
   <script
     async
     crossorigin="anonymous"
@@ -24,17 +16,17 @@
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
   </script>
 
-  <!-- Initialize Clerk after script loads -->
+  <!-- Inline JS that GitHub Pages will block -->
   <script>
+    // This inline script will trigger a CSP error on GitHub Pages:
+    // "Refused to execute inline script because it violates the following Content Security Policy..."
     window.addEventListener("load", async () => {
+      console.log("Trying to run inline Clerk code...");
       await Clerk.load();
-
-      if (Clerk.user) {
-        document.body.innerHTML = `<h1>Hello, ${Clerk.user.firstName}!</h1>`;
-      } else {
-        Clerk.mountSignIn(document.getElementById("sign-in"));
-      }
+      Clerk.mountSignIn(document.getElementById("sign-in"));
     });
   </script>
+
+  <p>Check the console for the CSP error.</p>
 </body>
 </html>
