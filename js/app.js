@@ -1,15 +1,16 @@
 // Wait for the page to load
 window.addEventListener("load", async () => {
-  console.log("App loaded, initializing Clerk...");
+  console.log("Initializing Clerk...");
 
   // Load Clerk SDK
   await Clerk.load();
 
-  // If a user is signed in, show their name
+  // If user is signed in, show greeting
   if (Clerk.user) {
-    document.body.innerHTML = `<h1>Hello, ${Clerk.user.firstName}!</h1>`;
+    document.getElementById("welcome").innerHTML = `<h2>Hello, ${Clerk.user.firstName}!</h2>`;
+    document.getElementById("sign-in").style.display = "none";
   } else {
-    // Otherwise, mount the sign-in form
+    // Otherwise mount the sign-in form
     Clerk.mountSignIn(document.getElementById("sign-in"));
   }
 });
