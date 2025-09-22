@@ -1,71 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clerk Login Test</title>
-  <script type="module">
-    import { Clerk } from "https://esm.run/@clerk/clerk-js";
+  <meta charset="UTF-8">
+  <title>Clerk Example</title>
 
-    const clerk = new Clerk("pk_test_ZXhvdGljLWFhcmR2YXJrLTI4LmNsZXJrLmFjY291bnRzLmRldiQ");
-
-    window.onload = async () => {
-      await clerk.load();
-
-      const userButton = document.getElementById("user");
-      const signInDiv = document.getElementById("sign-in");
-      const userInfoDiv = document.getElementById("user-info");
-
-      if (clerk.user) {
-        // Logged in
-        userButton.style.display = "block";
-        userInfoDiv.innerHTML = `<p>Welcome, ${clerk.user.firstName || "user"}!</p>`;
-        signInDiv.style.display = "none";
-      } else {
-        // Not logged in
-        clerk.mountSignIn(signInDiv);
-      }
-
-      // Add listener for when login is completed
-      clerk.addListener(({ user }) => {
-        if (user) {
-          location.reload(); // Reload to reflect logged-in state
-        }
-      });
-    };
-  </script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 2rem;
-      background: #f0f0f0;
-    }
-    #sign-in {
-      margin: auto;
-      width: 300px;
-    }
-    #user-info {
-      margin-top: 2rem;
-    }
-    #user {
-      display: none;
-    }
-  </style>
+  <!-- CSP updated to allow Clerk -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+          default-src 'self';
+          script-src 'self' https://cdn.jsdelivr.net;
+          connect-src 'self' https://api.clerk.dev https://cdn.jsdelivr.net;
+          style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+          img-src 'self' data: https://cdn.jsdelivr.net;">
 </head>
 <body>
-  <h1>🔐 Clerk Login Test</h1>
   <div id="sign-in"></div>
-  <div id="user-info"></div>
-  <div id="user">
-    <clerk-user-button></clerk-user-button>
-  </div>
 
+  <!-- Load Clerk from jsDelivr CDN -->
   <script
     async
     crossorigin="anonymous"
-    data-clerk-publishable-key="pk_test_ZXhvdGljLWFhcmR2YXJrLTI4LmNsZXJrLmFjY291bnRzLmRldiQ"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js"
-  ></script>
+    data-clerk-publishable-key="pk_test_YWR2YW5jZWQtb3NwcmV5LTIzLmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js">
+  </script>
+
+  <!-- Initialize Clerk after script loads -->
+  <script>
+    window.addEventListener("load", async () => {
+      await Clerk.load();
+
+      if (Clerk.user) {
+        document.body.innerHTML = `<h1>Hello, ${Clerk.user.firstName}!</h1>`;
+      } else {
+        Clerk.mountSignIn(document.getElementById("sign-in"));
+      }
+    });
+  </script>
 </body>
 </html>
